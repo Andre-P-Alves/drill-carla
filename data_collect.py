@@ -27,7 +27,7 @@ terminal_configs = {
 }
 
 env_configs = {
-    'carla_map': 'Town01',
+    'carla_map': 'Town02',
     'weather_group': 'dynamic_1.0',
     'routes_group': 'train'
 }
@@ -119,6 +119,10 @@ if __name__ == '__main__':
                 state_list = []
                 ep_dict['done'].append(c_route)
                 action = basic_agent.get_action()
+                control = carla.VehicleControl(throttle=action[0], steer=action[1])
+                control, _, _ = longitudinal_noiser.compute_noise(control, obs['speed'])
+                control, _, _ = lateral_noiser.compute_noise(control, obs['speed'])
+                action = np.array([control.throttle, control.steer])
                 ep_dict['actions'].append([action[0], action[1]])
                 birdview = obs['birdview']
                 for i_mask in range(1):
@@ -139,7 +143,6 @@ if __name__ == '__main__':
                 Image.fromarray(right_rgb).save(episode_dir / 'right_rgb' / '{:0>4d}.png'.format(i_step))
 
                 ep_dict['state'].append(obs['state'])
-
                 obs, reward, done, info = env.step(action)
                 c_route = info['route_completion']['is_route_completed']
 

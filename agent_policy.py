@@ -16,17 +16,14 @@ class AgentPolicy(nn.Module):
     def __init__(self,
                  observation_space: gym.spaces.Space,
                  action_space: gym.spaces.Space,
+                 feature_extractor,
                  policy_head_arch=[256, 256],
-                 features_extractor_entry_point=None,
-                 features_extractor_kwargs={},
                  distribution_entry_point=None,
                  distribution_kwargs={}):
 
         super(AgentPolicy, self).__init__()
         self.observation_space = observation_space
         self.action_space = action_space
-        self.features_extractor_entry_point = features_extractor_entry_point
-        self.features_extractor_kwargs = features_extractor_kwargs
         self.distribution_entry_point = distribution_entry_point
         self.distribution_kwargs = distribution_kwargs
         if th.cuda.is_available():
@@ -37,8 +34,7 @@ class AgentPolicy(nn.Module):
         self.optimizer_class = th.optim.Adam
         self.optimizer_kwargs = {'eps': 1e-5}
 
-        features_extractor_class = load_entry_point(features_extractor_entry_point)
-        self.features_extractor = features_extractor_class(observation_space, **features_extractor_kwargs)
+        self.features_extractor = feature_extractor
 
         distribution_class = load_entry_point(distribution_entry_point)
         self.action_dist = distribution_class(int(np.prod(action_space.shape)), **distribution_kwargs)
@@ -172,8 +168,6 @@ class AgentPolicy(nn.Module):
             observation_space=self.observation_space,
             action_space=self.action_space,
             policy_head_arch=self.policy_head_arch,
-            features_extractor_entry_point=self.features_extractor_entry_point,
-            features_extractor_kwargs=self.features_extractor_kwargs,
             distribution_entry_point=self.distribution_entry_point,
             distribution_kwargs=self.distribution_kwargs,
         )

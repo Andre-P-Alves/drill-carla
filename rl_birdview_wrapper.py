@@ -167,7 +167,8 @@ class RlBirdviewWrapper(gym.Wrapper):
         obs_dict.update({
             'central_rgb': central_rgb,
             'left_rgb': left_rgb,
-            'right_rgb': right_rgb
+            'right_rgb': right_rgb,
+            'speed': obs['speed']['forward_speed'][0] * 3.6
         })
 
         return obs_dict

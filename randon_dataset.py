@@ -24,14 +24,15 @@ class ExpertDataset(th.utils.data.Dataset):
                 route_path = self.dataset_path / ('route_%02d' % route_idx) / ('ep_%02d' % ep_idx)
                 route_df = pd.read_json(route_path / 'episode.json')
                 traj_length = route_df.shape[0]
-                self.length += traj_length
-                for step_idx in range(traj_length):
+                for _ in range(int(traj_length/subsample_frequency)):
+                    step_idx = np.random.randint(0, traj_length)
                     self.get_idx.append((route_idx, ep_idx, step_idx))
                     state_dict = {}
                     for state_key in route_df.columns:
                         state_dict[state_key] = route_df.iloc[step_idx][state_key]
                     self.trajs_states.append(state_dict)
                     self.trajs_actions.append(th.Tensor(route_df.iloc[step_idx]['actions']))
+                    self.length += 1
 
         self.trajs_actions = th.stack(self.trajs_actions)
         self.actual_obs = [None for _ in range(self.length)]
