@@ -155,19 +155,7 @@ class RlBirdviewWrapper(gym.Wrapper):
             'birdview': birdview
         })
 
-        central_rgb = obs['central_rgb']['data']
-        central_rgb = np.transpose(central_rgb, [2, 0, 1])
-
-        left_rgb = obs['left_rgb']['data']
-        left_rgb = np.transpose(left_rgb, [2, 0, 1])
-
-        right_rgb = obs['right_rgb']['data']
-        right_rgb = np.transpose(right_rgb, [2, 0, 1])
-
         obs_dict.update({
-            'central_rgb': central_rgb,
-            'left_rgb': left_rgb,
-            'right_rgb': right_rgb,
             'speed': obs['speed']['forward_speed'][0] * 3.6
         })
 
