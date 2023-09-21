@@ -37,7 +37,7 @@ def learn_bc(polcies, device, eval_loader):
     start_ep = 0
     i_steps = 0
 
-    episodes = 10
+    episodes = 350
     ent_weight = 0.01
     min_eval_loss = np.inf
     for i_episode in tqdm.tqdm(range(start_ep, episodes)):
@@ -96,7 +96,7 @@ def learn_bc(polcies, device, eval_loader):
                 f'loss_{policy_i}': loss,
                 f'eval_loss_{policy_i}': eval_loss,
             }, step=i_steps)
-            ckpt_path = (ckpt_dir / f'bc_ckpt_{i_episode}_min_policy_{policy_i}_eval.pth').as_posix()
+            ckpt_path = (ckpt_dir / f'bc3_ckpt_{i_episode}_min_policy_{policy_i}_eval.pth').as_posix()
             th.save(
                 {'policy_state_dict': policy.state_dict()},
                ckpt_path
@@ -149,9 +149,9 @@ if __name__ == '__main__':
         gail_train_loader = th.utils.data.DataLoader(
             ExpertDataset(
                 'gail_experts',
-                n_routes=4,
+                n_routes=3,
                 n_eps=1,
-                subsample_frequency=n_emsamble
+                subsample_frequency=1#n_emsamble
             ),
             batch_size=batch_size,
             shuffle=True,

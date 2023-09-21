@@ -7,3 +7,7 @@ wandb
 *.pyc
 screenlog.0
 *.png
+*.npy
+dril
+*.json
+*.txt

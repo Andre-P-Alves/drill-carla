@@ -125,6 +125,8 @@ if __name__ == '__main__':
                 action = np.array([control.throttle, control.steer])
                 ep_dict['actions'].append([action[0], action[1]])
                 birdview = obs['birdview']
+                array_path = episode_dir / 'birdview_masks' / '{:0>4d}.npy'.format(i_step)
+                np.save(array_path, birdview)
                 for i_mask in range(1):
                     birdview_mask = birdview[i_mask * 3: i_mask * 3 + 3]
                     birdview_mask = np.transpose(birdview_mask, [1, 2, 0]).astype(np.uint8)
