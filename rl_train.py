@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
     train_kwargs = {
         'initial_learning_rate': 2e-5,
-        'n_steps_total': 3072,
+        'n_steps_total': 12288,
         'batch_size': 256,
         'n_epochs': 20,
         'gamma': 0.99,
